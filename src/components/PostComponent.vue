@@ -3,11 +3,27 @@
     <h1>Vue JS</h1>
     <h2>A to-do application</h2>
     <h5>Double click on a post to delete it. wait for a sec after deleting. pls ignore the shitty styling.. 😫</h5>
-    <div class="create-post">
-      <label for="create-post">Say something...</label>
-      <input type="text" id="create-post" v-model="text" placeholder="Create a post" />
-      <button v-on:click="createPost">Post!</button>
+    <div class="flexcenter">
+      <div class="create-post">
+        <label for="create-post">Say something...</label>
+        <input
+          type="text"
+          id="create-post"
+          v-model="text"
+          placeholder="Create a post"
+          v-on:keyup.enter="createPost"
+        />
+        <!-- <button v-on:click="createPost" v-on:keyup.enter="createPost">Post!</button> -->
+      </div>
     </div>
+    
+    <p class="center" v-if="createLoading">
+      <img
+        src="https://media2.giphy.com/media/3oEjI6SIIHBdRxXI40/200.gif"
+        alt
+        class="createLoading"
+      />
+    </p>
 
     <div v-if="loading" class="loading">
       <p class="center">
@@ -45,7 +61,8 @@ export default {
       posts: [],
       error: "",
       text: "",
-      loading: false
+      loading: false,
+      createLoading: false
     };
   },
   async created() {
@@ -60,12 +77,16 @@ export default {
   methods: {
     async createPost() {
       await PostService.insertPost(this.text);
+      this.createLoading = true;
       this.text = "";
       this.posts = await PostService.getPosts();
+      this.createLoading = false;
     },
     async deletePost(id) {
       await PostService.deletePost(id);
+      this.createLoading = true;
       this.posts = await PostService.getPosts();
+      this.createLoading = false;
     }
   }
 };
@@ -95,6 +116,11 @@ div.container {
 
 div.create-post {
   margin-bottom: 2em;
+  display: flex;
+}
+
+.createLoading {
+  width: 3em;
 }
 
 p.error {
