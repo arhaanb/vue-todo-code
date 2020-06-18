@@ -10,7 +10,9 @@
     </div>
 
     <div v-if="loading" class="loading">
-      <img src="https://miro.medium.com/max/1600/1*CsJ05WEGfunYMLGfsT2sXA.gif" alt />
+      <p class="center">
+        <img src="https://miro.medium.com/max/1600/1*CsJ05WEGfunYMLGfsT2sXA.gif" alt />
+      </p>
     </div>
 
     <p class="error" v-if="error">{{ error }}</p>
@@ -85,6 +87,10 @@ div.container {
 
 .center {
   text-align: center;
+}
+
+.loading img {
+  width: 100%;
 }
 
 div.create-post {
