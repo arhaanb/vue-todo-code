@@ -1,14 +1,17 @@
 <template>
   <div class="container">
     <h1>Latest Posts</h1>
-
     <div class="create-post">
       <label for="create-post">Say something...</label>
       <input type="text" id="create-post" v-model="text" placeholder="Create a post" />
       <button v-on:click="createPost">Post!</button>
     </div>
-
     <hr />
+
+    <div v-if="loading" class="loading">
+      <img src="https://miro.medium.com/max/1600/1*CsJ05WEGfunYMLGfsT2sXA.gif" alt />
+    </div>
+
     <p class="error" v-if="error">{{ error }}</p>
     <div class="posts-container">
       <div
@@ -34,12 +37,15 @@ export default {
     return {
       posts: [],
       error: "",
-      text: ""
+      text: "",
+      loading: false
     };
   },
   async created() {
     try {
+      this.loading = true;
       this.posts = await PostService.getPosts();
+      this.loading = false;
     } catch (err) {
       this.error = err.message;
     }
